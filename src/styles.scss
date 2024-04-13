@@ -1,1 +1,80 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  background-color: black;
+}
+
+app-root {
+  width: 100vw;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url("./assets/img/guitar-login-big.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-mdc-raised-button:not(:disabled) {
+  background-color: #868f56 !important;
+}
+
+// general start
+.dFlex {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.center-v {
+  align-items: center;
+}
+
+.center-h {
+  justify-content: center;
+}
+// general end
+
+// auth start
+app-authentication,
+app-register {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.auth-btn {
+  width: 96px;
+  text-align: center;
+}
+
+.mat-mdc-form-field-hint-wrapper,
+.mat-mdc-form-field-error-wrapper {
+  padding: 0 8px !important;
+}
+// auth end
+
+.popup-input {
+  .mat-mdc-text-field-wrapper {
+      width: 250px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  app-root {
+
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+      url("./assets/img/guitar-login.jpg") !important;
+  }
+}

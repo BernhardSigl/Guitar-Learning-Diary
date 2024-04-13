@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "guitarlearning-10830": {
+      "hosting": {
+        "guitarlearning": [
+          "guitarlearning-10830"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "guitarlearning-10830"
+  }
+}
