@@ -61,13 +61,13 @@ export class FirebaseService {
         this.email = user.email;
         this.categoryDropdown = user.categories;
         if (user.collection) {      
-          user.collection.forEach((element: { categoryName: string,  exerciseName: string, licksAmount: number}) => {
+          user.collection.forEach((element: { categoryName: string,  exerciseName: string, licksAmount: number, categorySelected: boolean, exerciseSelected: boolean}) => {
             this.collection.push({
               licksAmount: element.licksAmount,
               categoryName: element.categoryName,
-              categorySelected: false,
+              categorySelected: element.categorySelected,
               exerciseName: element.exerciseName,
-              exerciseSelected: false,
+              exerciseSelected: element.exerciseSelected,
             });
           });
         }
@@ -135,4 +135,17 @@ export class FirebaseService {
   }
 
   // save exercise end
+
+  async saveCategoriesBool(bool: boolean) {
+
+    this.collection.forEach(element => {
+      element.categorySelected = bool;
+    });
+
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { collection: this.collection },
+      { merge: true }
+    );
+  }
 }

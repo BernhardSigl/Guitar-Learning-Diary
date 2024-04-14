@@ -9,6 +9,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { CommonModule } from '@angular/common';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { Category } from '../../class/category.class';
 
 @Component({
   selector: 'app-overview',
@@ -32,12 +33,20 @@ export class OverviewComponent {
   isAllCategoriesBtnSelected: boolean = false;
   isAllExercisesBtnSelected: boolean = false;
 
+  uniqueCategories: { categoryName: string; categorySelected: boolean }[] = [];
+  categoriesLoaded: boolean = false;
+
+  number: number = 1;
+
+  gambleArray: any[] = [];
+
   constructor(public dialog: MatDialog) {}
 
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
+    await this.checkEmptyCategories();
+    await this.getUniqueCategories();
     this.allCategories();
-    // this.allExercises();
   }
 
   addExercisePopup() {
@@ -46,21 +55,40 @@ export class OverviewComponent {
     });
   }
 
+  async checkEmptyCategories() {
+    if (this.firebase.collection.length === 0) {
+      this.firebase.addCategory('Sweep picking');
+      const newCategory = new Category({
+        categoryName: 'Sweep picking',
+        exerciseName: 'Downward',
+        licksAmount: 3,
+        categorySelected: false,
+        exerciseSelected: false,
+      });
+      await this.firebase.addCollection(newCategory);
+
+      await this.firebase.ngOnInit();
+    }
+  }
+
   // categories start
   allCategories() {
-    console.log(this.categoriesSelected);
-    
+    this.categoriesSelected = !this.categoriesSelected;
     if (!this.categoriesSelected) {
-      this.controlCategories(true);
-    } else {
       this.controlCategories(false);
+    } else {
+      this.controlCategories(true);
       this.controlExercises(false);
     }
   }
 
   controlCategories(bool: boolean) {
+    this.uniqueCategories.forEach((element) => {
+      element.categorySelected = bool;
+    });
     this.firebase.collection.forEach((element) => {
       element.categorySelected = bool;
+      this.firebase.saveCategoriesBool(bool);
     });
     this.categoriesSelected = bool;
     this.allCategoriesBtn(bool);
@@ -74,6 +102,10 @@ export class OverviewComponent {
     let atLeastOneFalse = false;
     collection.categorySelected = !collection.categorySelected;
     this.firebase.collection.forEach((element) => {
+      if (collection.categoryName === element.categoryName) {
+        element.categorySelected = collection.categorySelected;
+      }
+
       if (!element.categorySelected) {
         atLeastOneFalse = true;
         this.allCategoriesBtn(false);
@@ -86,10 +118,6 @@ export class OverviewComponent {
     });
   }
   // categories end
-
-  help() {
-    console.log(this.firebase.collection);
-  }
 
   // exercises start
   allExercises() {
@@ -129,4 +157,80 @@ export class OverviewComponent {
     });
   }
   // exercises end
+
+  increaseNumber() {
+    this.number++;
+  }
+
+  decreaseNumber() {
+    if (this.number > 1) {
+      this.number--;
+    }
+  }
+
+  result() {
+    this.gambleArray = [];
+    this.firebase.collection.forEach((element) => {
+      if (element.exerciseSelected === true) {
+        this.gambleArray.push({
+          exerciseName: element.exerciseName,
+          licksAmount: element.licksAmount,
+        });
+      } else {
+        console.log('err');
+      }
+    });
+
+    this.gambleArray.forEach((exercise) => {
+      exercise.lickNumber = this.generateRandomLicks(0, exercise.licksAmount);
+    });
+
+    if (this.gambleArray.length > 0) {
+      this.gambleArray = this.generateResults(this.number); // Hier das Ergebnis in gambleArray speichern
+    }
+
+    console.log(this.gambleArray);
+  }
+
+  generateRandomLicks(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  generateResults(number: number) {
+    const results = [];
+
+    for (let i = 0; i < number; i++) {
+      const randomIndex = Math.floor(Math.random() * this.gambleArray.length);
+      const selectedExercise = this.gambleArray[randomIndex];
+      const lickNumber = this.generateRandomLicks(
+        0,
+        selectedExercise.licksAmount
+      );
+
+      results.push({
+        exerciseName: selectedExercise.exerciseName,
+        lickNumber: lickNumber,
+      });
+    }
+
+    return results;
+  }
+
+  async getUniqueCategories() {
+    this.uniqueCategories = [];
+    this.firebase.collection.forEach((collection) => {
+      if (
+        !this.uniqueCategories.find(
+          (cat) => cat.categoryName === collection.categoryName
+        )
+      ) {
+        this.uniqueCategories.push({
+          categoryName: collection.categoryName,
+          categorySelected: false,
+        });
+      }
+    });
+    this.categoriesLoaded = true;
+    console.log(this.uniqueCategories);
+  }
 }

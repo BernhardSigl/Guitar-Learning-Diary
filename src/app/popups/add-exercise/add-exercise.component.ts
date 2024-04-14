@@ -33,6 +33,7 @@ export class AddExerciseComponent {
   exerciseName!: string;
   addCategory!: string;
   licksAmount!: number;
+
   disableSaveBtn = false;
 
   categoryArray: any[] = [];
@@ -43,14 +44,6 @@ export class AddExerciseComponent {
 
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
-    this.checkEmptyCategories();
-  }
-
-  logInput(): void {
-    // console.log('Category:', this.categoryName);
-    // console.log('addCategory:', this.addCategory);
-    // console.log('Exercise:', this.exerciseName);
-    // console.log('Amount of licks:', this.licksAmount);
   }
 
   async save() {
@@ -59,18 +52,12 @@ export class AddExerciseComponent {
       categoryName: this.categoryName || 'no category',
       exerciseName: this.exerciseName,
       licksAmount: this.licksAmount || 0,
-      exerciseId: uuidv4(),
+      categorySelected: false,
+      exerciseSelected: false,
     });
     await this.firebase.addCollection(newCategory);
     await this.firebase.ngOnInit();
     this.dialogRef.close();
-  }
-
-  async checkEmptyCategories() {
-    if (this.firebase.collection.length === 0) {
-      this.firebase.addCategory('Sweep picking');
-      await this.firebase.ngOnInit();
-    }
   }
 
   async addCategoryBtn(addCategory: string) {

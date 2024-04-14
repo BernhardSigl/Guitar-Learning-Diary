@@ -17,13 +17,27 @@
 
     <div>
       <h2>Categories:</h2>
-      <mat-chip-listbox *ngIf="this.firebase.collection && this.firebase.collection.length > 1" aria-label="Fish selection" (click)="allCategories()">
-        <mat-chip-option [selected]="isAllCategoriesBtnSelected" color="accent">Select all</mat-chip-option>
+      <mat-chip-listbox
+        *ngIf="this.firebase.collection && this.firebase.collection.length > 1"
+        aria-label="Fish selection"
+        (click)="allCategories()"
+      >
+        <mat-chip-option [selected]="isAllCategoriesBtnSelected" color="accent"
+          >Select all</mat-chip-option
+        >
       </mat-chip-listbox>
 
       <mat-chip-listbox multiple aria-label="Fish selection">
-        @for (collection of firebase.collection; track collection) {
-        <mat-chip-option (click)="categoriesBehaviour(collection)" color="accent" [selected]="collection.categorySelected">{{ collection.categoryName }}</mat-chip-option>
+
+        @for (category of uniqueCategories; track category) {
+        <mat-chip-option
+        
+          (click)="categoriesBehaviour(category)"
+          color="accent"
+          [selected]="category.categorySelected"
+          >{{ category.categoryName }}
+          </mat-chip-option
+        >
         } @empty {
         <h3>No categories</h3>
         }
@@ -32,19 +46,62 @@
       <br />
 
       <h2>Exercises:</h2>
-      <mat-chip-listbox *ngIf="this.firebase.collection && this.firebase.collection.length > 1" aria-label="Fish selection" (click)="allExercises()">
-        <mat-chip-option [selected]="isAllExercisesBtnSelected" color="accent">Select all</mat-chip-option>
+      <mat-chip-listbox
+        *ngIf="this.firebase.collection && this.firebase.collection.length > 1"
+        aria-label="Fish selection"
+        (click)="allExercises()"
+      >
+        <mat-chip-option [selected]="isAllExercisesBtnSelected" color="accent"
+          >Select all</mat-chip-option
+        >
       </mat-chip-listbox>
 
       <mat-chip-listbox multiple aria-label="Fish selection">
         @for (collection of firebase.collection; track collection) {
-        <mat-chip-option (click)="exercisesBehaviour(collection)" *ngIf="collection.categorySelected" color="accent" [selected]="collection.exerciseSelected">{{
-          collection.exerciseName
-        }}</mat-chip-option>
+
+        <div class="column">
+        <h3>{{ collection.categoryName }}</h3>
+        <mat-chip-option
+          (click)="exercisesBehaviour(collection)"
+          *ngIf="collection.categorySelected"
+          color="accent"
+          [selected]="collection.exerciseSelected"
+        >
+          {{ collection.exerciseName }}
+        </mat-chip-option>
+        </div>
         } @empty {
         <h3>No exercises</h3>
         }
       </mat-chip-listbox>
     </div>
+
+    <br />
+
+    <h2>Results:</h2>
+
+    <div class="dFlex checkNumbers">
+      <h3 class="number dFlex center-v center-h">{{ number }}</h3>
+
+      <button
+        mat-mini-fab
+        color="primary"
+        aria-label="Example icon button with a menu icon"
+        (click)="increaseNumber()"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+
+      <button
+        mat-mini-fab
+        color="primary"
+        aria-label="Example icon button with a menu icon"
+        (click)="decreaseNumber()"
+      >
+        <mat-icon>remove</mat-icon>
+      </button>
+    </div>
+
+    <button (click)="result()">result</button>
   </div>
 </div>

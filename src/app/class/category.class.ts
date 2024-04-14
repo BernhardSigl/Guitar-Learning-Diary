@@ -2,13 +2,15 @@ export class Category {
     categoryName: string;
     exerciseName: string;
     licksAmount: number;
-    exerciseId: string;
+    categorySelected: boolean;
+    exerciseSelected: boolean;
 
     constructor(obj: any) {
         this.categoryName = obj && obj.categoryName ? obj.categoryName : '';
         this.exerciseName = obj && obj.exerciseName ? obj.exerciseName : '';
-        this.licksAmount = obj && obj.licksAmount ? obj.licksAmount : '';
-        this.exerciseId = obj && obj.exerciseId ? obj.exerciseId : '';
+        this.licksAmount = obj && obj.licksAmount || 0;
+        this.categorySelected = obj && typeof obj.categorySelected === 'boolean' ? obj.categorySelected : false;
+        this.exerciseSelected = obj && typeof obj.exerciseSelected === 'boolean' ? obj.exerciseSelected : false;
     }
 
     toJson() {
@@ -16,7 +18,8 @@ export class Category {
             categoryName: this.categoryName,
             exerciseName: this.exerciseName,
             licksAmount: this.licksAmount,
-            exerciseId: this.exerciseId,
+            categorySelected: this.categorySelected,
+            exerciseSelected: this.exerciseSelected,
         }
     }
 }

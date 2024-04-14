@@ -40,6 +40,11 @@ app-overview {
   flex-direction: column;
 }
 
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
 .center-v {
   align-items: center;
 }
