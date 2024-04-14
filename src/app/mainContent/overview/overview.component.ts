@@ -33,6 +33,8 @@ export class OverviewComponent {
   isAllCategoriesBtnSelected: boolean = false;
   isAllExercisesBtnSelected: boolean = false;
 
+  previousCategoryName: string = '';
+
   uniqueCategories: { categoryName: string; categorySelected: boolean }[] = [];
   categoriesLoaded: boolean = false;
 
@@ -98,7 +100,7 @@ export class OverviewComponent {
     this.isAllCategoriesBtnSelected = bool;
   }
 
-  categoriesBehaviour(collection: any) {
+  categoriesBehaviour(collection: any) {  
     let atLeastOneFalse = false;
     collection.categorySelected = !collection.categorySelected;
     this.firebase.collection.forEach((element) => {
@@ -131,6 +133,9 @@ export class OverviewComponent {
   controlExercises(bool: boolean) {
     this.firebase.collection.forEach((element) => {
       element.exerciseSelected = bool;
+      console.log(bool);
+      
+      this.firebase.saveExercisesBool(bool);
     });
     this.exercisesSelected = bool;
     this.allExercisesBtn(bool);
@@ -232,5 +237,29 @@ export class OverviewComponent {
     });
     this.categoriesLoaded = true;
     console.log(this.uniqueCategories);
+  }
+  
+  sortedExercises() {
+    return this.firebase.collection.sort((a, b) => {
+      if (a.categoryName < b.categoryName) {
+        return -1;
+      }
+      if (a.categoryName > b.categoryName) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  hasSelectedExercises(): boolean {
+    return this.firebase.collection.some(item => item.categorySelected);
+  }
+
+  hasMultipleSelectedExercises(): boolean {
+    return this.firebase.collection.filter(item => item.categorySelected).length > 1;
+  }
+
+  hasMultipleCategories(): boolean {
+    return this.uniqueCategories.length > 1;
   }
 }

@@ -22,22 +22,19 @@
         aria-label="Fish selection"
         (click)="allCategories()"
       >
-        <mat-chip-option [selected]="isAllCategoriesBtnSelected" color="accent"
+        <mat-chip-option *ngIf="hasMultipleCategories()" [selected]="isAllCategoriesBtnSelected" color="accent"
           >Select all</mat-chip-option
         >
       </mat-chip-listbox>
 
       <mat-chip-listbox multiple aria-label="Fish selection">
-
         @for (category of uniqueCategories; track category) {
         <mat-chip-option
-        
           (click)="categoriesBehaviour(category)"
           color="accent"
           [selected]="category.categorySelected"
           >{{ category.categoryName }}
-          </mat-chip-option
-        >
+        </mat-chip-option>
         } @empty {
         <h3>No categories</h3>
         }
@@ -46,33 +43,47 @@
       <br />
 
       <h2>Exercises:</h2>
+      <h3 *ngIf="!hasSelectedExercises()">No exercises are selected</h3>
+
       <mat-chip-listbox
         *ngIf="this.firebase.collection && this.firebase.collection.length > 1"
         aria-label="Fish selection"
         (click)="allExercises()"
       >
-        <mat-chip-option [selected]="isAllExercisesBtnSelected" color="accent"
+        <mat-chip-option [selected]="isAllExercisesBtnSelected" *ngIf="hasSelectedExercises() && hasMultipleSelectedExercises()" color="accent"
           >Select all</mat-chip-option
         >
       </mat-chip-listbox>
 
       <mat-chip-listbox multiple aria-label="Fish selection">
-        @for (collection of firebase.collection; track collection) {
+        <div class="exercise-box">
+        @for (collection of sortedExercises(); track collection; let i = $index)
+        {
 
-        <div class="column">
-        <h3>{{ collection.categoryName }}</h3>
-        <mat-chip-option
-          (click)="exercisesBehaviour(collection)"
-          *ngIf="collection.categorySelected"
-          color="accent"
-          [selected]="collection.exerciseSelected"
-        >
-          {{ collection.exerciseName }}
-        </mat-chip-option>
-        </div>
+        <!-- <div class="test"> -->
+          <h5
+            class="category-in-exercise"
+            *ngIf="
+              (i === 0 ||
+              collection.categoryName !== sortedExercises()[i - 1].categoryName) && collection.categorySelected
+            "
+          >
+            {{ collection.categoryName }}
+          </h5>
+
+          <mat-chip-option
+            (click)="exercisesBehaviour(collection)"
+            *ngIf="collection.categorySelected"
+            color="accent"
+            [selected]="collection.exerciseSelected"
+          >
+            {{ collection.exerciseName }}
+          </mat-chip-option>
+        <!-- </div> -->
         } @empty {
         <h3>No exercises</h3>
         }
+        </div>
       </mat-chip-listbox>
     </div>
 

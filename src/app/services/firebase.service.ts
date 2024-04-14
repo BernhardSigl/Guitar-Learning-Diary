@@ -20,11 +20,8 @@ export class FirebaseService {
   userId!: string;
   usersArray: any[] = [];
 
-  contributionsArray: any[] = [];
   email!: string;
   collection: any[] = [];
-  // categories: any[] = [];
-  // exercises: any[] = [];
   categoryDropdown: any[] = [];
 
   firestore: Firestore = inject(Firestore);
@@ -148,4 +145,19 @@ export class FirebaseService {
       { merge: true }
     );
   }
+
+  async saveExercisesBool(bool: boolean) {
+
+    this.collection.forEach(element => {
+      element.exerciseSelected = bool;
+    });
+
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { collection: this.collection },
+      { merge: true }
+    );
+  }
+
+  
 }
