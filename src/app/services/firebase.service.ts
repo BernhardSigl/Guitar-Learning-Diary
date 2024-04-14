@@ -23,6 +23,9 @@ export class FirebaseService {
   contributionsArray: any[] = [];
   email!: string;
   collection: any[] = [];
+  categories: any[] = [];
+  exercises: any[] = [];
+  categoryDropdown: any[] = [];
 
   firestore: Firestore = inject(Firestore);
 
@@ -43,7 +46,7 @@ export class FirebaseService {
           // this.userId = doc.id;
           this.usersArray.push(usersData);
         });
-        await this.getLoggedInUserInfos();
+        // await this.getLoggedInUserInfos();
         resolve();
       });
     });
@@ -51,13 +54,29 @@ export class FirebaseService {
 
   async updateUserValues() {
     const userId = localStorage.getItem('userId');
+    this.categoryDropdown = [];
+    this.categories = [];
     for (const user of this.usersArray) {
-      if (user.userId === userId) {       
-        this.contributionsArray.push(user);
-        this.email = this.contributionsArray[0].email;
-        this.collection = this.contributionsArray[0].collection;
-        break;
+      if (user.userId === userId) {
+        this.email = user.email;
+        this.categoryDropdown = user.categories;
+        if (user.collection) {
+          this.collection = user.collection;
+          user.collection.forEach((element: { categoryName: any[] }) => {
+            this.categories.push({
+              categoryName: element.categoryName,
+              categorySelected: false,
+            });
+          });
+        }
+        user.collection.forEach((element: { exerciseName: any[] }) => {
+          this.exercises.push({
+            exerciseName: element.exerciseName,
+            exerciseSelected: false,
+          });
+        });
       }
+      break;
     }
   }
 
@@ -70,9 +89,9 @@ export class FirebaseService {
     return doc(this.getUsersColRef(), this.userId);
   }
 
-  async getLoggedInUserInfos(): Promise<void> {
-    const loggedInUserInfo = this.usersArray[0];
-  }
+  // async getLoggedInUserInfos(): Promise<void> {
+  //   const loggedInUserInfo = this.usersArray[0];
+  // }
 
   async createNewUser(email: string) {
     const newUser = new User({
@@ -107,6 +126,14 @@ export class FirebaseService {
     await setDoc(
       this.getSingleUserDocRef(),
       { collection: arrayUnion(newCategory.toJson()) },
+      { merge: true }
+    );
+  }
+
+  async addCategory(category: string) {
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { categories: arrayUnion(category) },
       { merge: true }
     );
   }

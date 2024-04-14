@@ -5,10 +5,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { FirebaseService } from '../../services/firebase.service';
 import { Category } from '../../class/category.class';
 import { v4 as uuidv4 } from 'uuid';
+import { CommonModule } from '@angular/common';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-exercise',
@@ -21,6 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
     MatFormFieldModule,
     FormsModule,
     MatSelectModule,
+    CommonModule,
   ],
   templateUrl: './add-exercise.component.html',
   styleUrl: './add-exercise.component.scss',
@@ -36,8 +39,11 @@ export class AddExerciseComponent {
 
   firebase = inject(FirebaseService);
 
-  async ngOnInit():Promise<void>{
+  constructor(public dialogRef: MatDialogRef<AddExerciseComponent>) {}
+
+  async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
+    this.checkEmptyCategories();
   }
 
   logInput(): void {
@@ -56,5 +62,20 @@ export class AddExerciseComponent {
       exerciseId: uuidv4(),
     });
     await this.firebase.addCollection(newCategory);
+    await this.firebase.ngOnInit();
+    this.dialogRef.close();
+  }
+
+  async checkEmptyCategories() {
+    if (this.firebase.categories.length === 0) {
+      this.firebase.addCategory('Sweep picking');
+      await this.firebase.ngOnInit();
+    }
+  }
+
+  async addCategoryBtn(addCategory: string) {
+    await this.firebase.addCategory(addCategory);
+    await this.firebase.ngOnInit();
+    this.addCategory = '';
   }
 }

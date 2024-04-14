@@ -21,6 +21,11 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
+app-overview {
+  width: 80%;
+  padding: 10% 0;
+}
+
 .mat-mdc-raised-button:not(:disabled) {
   background-color: #868f56 !important;
 }
@@ -67,13 +72,20 @@ app-register {
 
 .popup-input {
   .mat-mdc-text-field-wrapper {
-      width: 250px !important;
+    width: 250px !important;
   }
 }
 
+// popups start
+.addExercisePopup {
+  position: absolute !important;
+  top: 0 !important;
+  margin-top: 10% !important;
+}
+// popups end
+
 @media (max-width: 768px) {
   app-root {
-
     background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
       url("./assets/img/guitar-login.jpg") !important;
   }
