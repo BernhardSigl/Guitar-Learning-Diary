@@ -23,8 +23,8 @@ export class FirebaseService {
   contributionsArray: any[] = [];
   email!: string;
   collection: any[] = [];
-  categories: any[] = [];
-  exercises: any[] = [];
+  // categories: any[] = [];
+  // exercises: any[] = [];
   categoryDropdown: any[] = [];
 
   firestore: Firestore = inject(Firestore);
@@ -55,26 +55,22 @@ export class FirebaseService {
   async updateUserValues() {
     const userId = localStorage.getItem('userId');
     this.categoryDropdown = [];
-    this.categories = [];
+    this.collection = [];
     for (const user of this.usersArray) {
       if (user.userId === userId) {
         this.email = user.email;
         this.categoryDropdown = user.categories;
-        if (user.collection) {
-          this.collection = user.collection;
-          user.collection.forEach((element: { categoryName: any[] }) => {
-            this.categories.push({
+        if (user.collection) {      
+          user.collection.forEach((element: { categoryName: string,  exerciseName: string, licksAmount: number}) => {
+            this.collection.push({
+              licksAmount: element.licksAmount,
               categoryName: element.categoryName,
               categorySelected: false,
+              exerciseName: element.exerciseName,
+              exerciseSelected: false,
             });
           });
         }
-        user.collection.forEach((element: { exerciseName: any[] }) => {
-          this.exercises.push({
-            exerciseName: element.exerciseName,
-            exerciseSelected: false,
-          });
-        });
       }
       break;
     }

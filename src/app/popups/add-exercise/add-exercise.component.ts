@@ -67,7 +67,7 @@ export class AddExerciseComponent {
   }
 
   async checkEmptyCategories() {
-    if (this.firebase.categories.length === 0) {
+    if (this.firebase.collection.length === 0) {
       this.firebase.addCategory('Sweep picking');
       await this.firebase.ngOnInit();
     }

@@ -26,16 +26,18 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 })
 export class OverviewComponent {
   firebase = inject(FirebaseService);
-  // selectAllCategories: boolean[] = [];
-  categoriesSelected = false;
-  exercisesSelected = false;
-  selectAllExercises: boolean[] = [];
+  categoriesSelected: boolean = false;
+  exercisesSelected: boolean = false;
+
+  isAllCategoriesBtnSelected: boolean = false;
+  isAllExercisesBtnSelected: boolean = false;
 
   constructor(public dialog: MatDialog) {}
 
   async ngOnInit(): Promise<void> {
     await this.firebase.ngOnInit();
     this.allCategories();
+    // this.allExercises();
   }
 
   addExercisePopup() {
@@ -44,31 +46,87 @@ export class OverviewComponent {
     });
   }
 
+  // categories start
   allCategories() {
+    console.log(this.categoriesSelected);
+    
     if (!this.categoriesSelected) {
-      this.firebase.categories.forEach((element) => {
-        element.categorySelected = true;
-      });
-      this.categoriesSelected = true;
+      this.controlCategories(true);
     } else {
-      this.firebase.categories.forEach((element) => {
-        element.categorySelected = false;
-      });
-      this.categoriesSelected = false;
+      this.controlCategories(false);
+      this.controlExercises(false);
     }
   }
 
+  controlCategories(bool: boolean) {
+    this.firebase.collection.forEach((element) => {
+      element.categorySelected = bool;
+    });
+    this.categoriesSelected = bool;
+    this.allCategoriesBtn(bool);
+  }
+
+  allCategoriesBtn(bool: boolean) {
+    this.isAllCategoriesBtnSelected = bool;
+  }
+
+  categoriesBehaviour(collection: any) {
+    let atLeastOneFalse = false;
+    collection.categorySelected = !collection.categorySelected;
+    this.firebase.collection.forEach((element) => {
+      if (!element.categorySelected) {
+        atLeastOneFalse = true;
+        this.allCategoriesBtn(false);
+        this.categoriesSelected = false;
+        return;
+      } else if (!atLeastOneFalse) {
+        this.allCategoriesBtn(true);
+        this.categoriesSelected = true;
+      }
+    });
+  }
+  // categories end
+
+  help() {
+    console.log(this.firebase.collection);
+  }
+
+  // exercises start
   allExercises() {
     if (!this.exercisesSelected) {
-      this.firebase.exercises.forEach((element) => {
-        element.exerciseSelected = true;
-      });
-      this.exercisesSelected = true;
+      this.controlExercises(true);
     } else {
-      this.firebase.exercises.forEach((element) => {
-        element.exerciseSelected = false;
-      });
-      this.exercisesSelected = false;
+      this.controlExercises(false);
     }
   }
+
+  controlExercises(bool: boolean) {
+    this.firebase.collection.forEach((element) => {
+      element.exerciseSelected = bool;
+    });
+    this.exercisesSelected = bool;
+    this.allExercisesBtn(bool);
+  }
+
+  allExercisesBtn(bool: boolean) {
+    this.isAllExercisesBtnSelected = bool;
+  }
+
+  exercisesBehaviour(collection: any) {
+    let atLeastOneFalse = false;
+    collection.exerciseSelected = !collection.exerciseSelected;
+    this.firebase.collection.forEach((element) => {
+      element.exerciseSelected;
+      if (!element.exerciseSelected) {
+        atLeastOneFalse = true;
+        this.allExercisesBtn(false);
+        this.exercisesSelected = false;
+        return;
+      } else if (!atLeastOneFalse) {
+        this.allExercisesBtn(true);
+        this.exercisesSelected = true;
+      }
+    });
+  }
+  // exercises end
 }

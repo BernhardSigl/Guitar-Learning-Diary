@@ -17,13 +17,13 @@
 
     <div>
       <h2>Categories:</h2>
-      <mat-chip-listbox *ngIf="this.firebase.categories && this.firebase.categories.length > 1" aria-label="Fish selection" (click)="allCategories()">
-        <mat-chip-option selected color="accent">Select all</mat-chip-option>
+      <mat-chip-listbox *ngIf="this.firebase.collection && this.firebase.collection.length > 1" aria-label="Fish selection" (click)="allCategories()">
+        <mat-chip-option [selected]="isAllCategoriesBtnSelected" color="accent">Select all</mat-chip-option>
       </mat-chip-listbox>
 
       <mat-chip-listbox multiple aria-label="Fish selection">
-        @for (category of firebase.categories; track category) {
-        <mat-chip-option color="accent" [selected]="category.categorySelected">{{ category.categoryName }}</mat-chip-option>
+        @for (collection of firebase.collection; track collection) {
+        <mat-chip-option (click)="categoriesBehaviour(collection)" color="accent" [selected]="collection.categorySelected">{{ collection.categoryName }}</mat-chip-option>
         } @empty {
         <h3>No categories</h3>
         }
@@ -33,13 +33,13 @@
 
       <h2>Exercises:</h2>
       <mat-chip-listbox *ngIf="this.firebase.collection && this.firebase.collection.length > 1" aria-label="Fish selection" (click)="allExercises()">
-        <mat-chip-option color="accent">Select all</mat-chip-option>
+        <mat-chip-option [selected]="isAllExercisesBtnSelected" color="accent">Select all</mat-chip-option>
       </mat-chip-listbox>
 
       <mat-chip-listbox multiple aria-label="Fish selection">
-        @for (exercise of firebase.exercises; track exercise) {
-        <mat-chip-option color="accent" [selected]="exercise.exerciseSelected">{{
-          exercise.exerciseName
+        @for (collection of firebase.collection; track collection) {
+        <mat-chip-option (click)="exercisesBehaviour(collection)" *ngIf="collection.categorySelected" color="accent" [selected]="collection.exerciseSelected">{{
+          collection.exerciseName
         }}</mat-chip-option>
         } @empty {
         <h3>No exercises</h3>
