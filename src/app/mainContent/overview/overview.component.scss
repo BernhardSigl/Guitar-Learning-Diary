@@ -8,7 +8,7 @@ h3 {
   margin: 0;
 }
 
-h5{
+.category-in-exercise{
   margin: 5px 0 5px 10px
 }
 
@@ -21,4 +21,20 @@ h5{
     background-color: white;
     color: black;
   }
+}
+
+.gamble-btn {
+  margin-bottom: 12px;
+}
+
+.gambleResult {
+ 
+}
+
+.category-in-gamble {
+  padding: 6px 12px;
+  margin: 12px 0 12px 0;
+  width: max-content;
+  background: #FF4081;
+  border-radius: 24px;
 }

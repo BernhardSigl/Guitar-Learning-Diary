@@ -41,6 +41,7 @@ export class OverviewComponent {
   number: number = 1;
 
   gambleArray: any[] = [];
+  uniqueCategoryNamesResults: string[] = [];
 
   constructor(public dialog: MatDialog) {}
 
@@ -133,8 +134,6 @@ export class OverviewComponent {
   controlExercises(bool: boolean) {
     this.firebase.collection.forEach((element) => {
       element.exerciseSelected = bool;
-      console.log(bool);
-      
       this.firebase.saveExercisesBool(bool);
     });
     this.exercisesSelected = bool;
@@ -180,25 +179,30 @@ export class OverviewComponent {
         this.gambleArray.push({
           exerciseName: element.exerciseName,
           licksAmount: element.licksAmount,
+          categoryName: element.categoryName
         });
       } else {
         console.log('err');
       }
     });
-
     this.gambleArray.forEach((exercise) => {
       exercise.lickNumber = this.generateRandomLicks(0, exercise.licksAmount);
     });
 
     if (this.gambleArray.length > 0) {
-      this.gambleArray = this.generateResults(this.number); // Hier das Ergebnis in gambleArray speichern
+      this.gambleArray = this.generateResults(this.number);
     }
+    this.gambleArray.sort((a, b) => {
+      return a.categoryName.localeCompare(b.categoryName); // Sort by categoryName
+    });
 
-    console.log(this.gambleArray);
+    const uniqueNamesSet = new Set<string>();
+    this.gambleArray.forEach(item => uniqueNamesSet.add(item.categoryName));
+    this.uniqueCategoryNamesResults = Array.from(uniqueNamesSet);
   }
 
   generateRandomLicks(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * max) + min + 1;
   }
 
   generateResults(number: number) {
@@ -215,6 +219,7 @@ export class OverviewComponent {
       results.push({
         exerciseName: selectedExercise.exerciseName,
         lickNumber: lickNumber,
+        categoryName: selectedExercise.categoryName
       });
     }
 
@@ -236,7 +241,6 @@ export class OverviewComponent {
       }
     });
     this.categoriesLoaded = true;
-    console.log(this.uniqueCategories);
   }
   
   sortedExercises() {
@@ -251,8 +255,12 @@ export class OverviewComponent {
     });
   }
 
-  hasSelectedExercises(): boolean {
+  hasSelectedCategories(): boolean {
     return this.firebase.collection.some(item => item.categorySelected);
+  }
+
+  hasSelectedExercises(): boolean {
+    return this.firebase.collection.some(item => item.exerciseSelected);
   }
 
   hasMultipleSelectedExercises(): boolean {

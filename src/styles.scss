@@ -3,7 +3,6 @@ body {
   height: 100%;
   display: flex;
   justify-content: center;
-  overflow: hidden;
   background-color: black;
 }
 
@@ -26,8 +25,10 @@ app-overview {
   padding: 10% 0;
 }
 
+.mat-mdc-unelevated-button[disabled],
+.mat-mdc-unelevated-button.mat-mdc-button-disabled,
 .mat-mdc-raised-button:not(:disabled) {
-  background-color: #868f56 !important;
+  background-color: #7e87c2 !important;
 }
 
 // general start
