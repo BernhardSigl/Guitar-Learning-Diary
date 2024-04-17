@@ -108,7 +108,7 @@
         >
           {{ collection.exerciseName }}
         </mat-chip-option>
-        <!-- </div> -->
+      
         } @empty {
         <h3>No exercises</h3>
         }
@@ -153,7 +153,8 @@
 
   <br />
 
-  <div class="gamble-output">
+  <h4 class="error-message" *ngIf="hasError">Der Gamble dard nicht größer als die Anzahl der Licks sein.</h4>
+  <div class="gamble-output" *ngIf="!hasError">
     @for (categoryName of uniqueCategoryNamesResults; track categoryName) {
 
     <div>
@@ -173,7 +174,8 @@
             Exercise: {{ gambleElement.exerciseName }}<br />Lick:
           </h3>
 
-          <h3 class="gamble-licks-output">#{{ gambleElement.lickNumber }}</h3>
+          <h3 class="gamble-licks-output">
+            #{{ gambleElement.lickNumber }}</h3>
         </div>
 
         } @empty {

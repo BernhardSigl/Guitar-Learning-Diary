@@ -33,6 +33,8 @@ export class OverviewComponent {
 
   isAllCategoriesBtnSelected: boolean = false;
   isAllExercisesBtnSelected: boolean = false;
+  doubles: boolean = false;
+  hasError: boolean = false;
 
   previousCategoryName: string = '';
 
@@ -113,7 +115,7 @@ export class OverviewComponent {
     this.isAllCategoriesBtnSelected = bool;
   }
 
-  categoriesBehaviour(collection: any) {  
+  categoriesBehaviour(collection: any) {
     let atLeastOneFalse = false;
     collection.categorySelected = !collection.categorySelected;
     this.firebase.collection.forEach((element) => {
@@ -184,19 +186,23 @@ export class OverviewComponent {
     }
   }
 
-  result() {
+  async result() {
     this.gambleArray = [];
     this.firebase.collection.forEach((element) => {
       if (element.exerciseSelected === true) {
         this.gambleArray.push({
           exerciseName: element.exerciseName,
           licksAmount: element.licksAmount,
-          categoryName: element.categoryName
+          categoryName: element.categoryName,
         });
       } else {
-        console.log('err');
+        return;
       }
     });
+    await this.showLickAmount();
+    if (this.hasError) {
+      return;
+    }
     this.gambleArray.forEach((exercise) => {
       exercise.lickNumber = this.generateRandomLicks(0, exercise.licksAmount);
     });
@@ -209,8 +215,56 @@ export class OverviewComponent {
     });
 
     const uniqueNamesSet = new Set<string>();
-    this.gambleArray.forEach(item => uniqueNamesSet.add(item.categoryName));
+    this.gambleArray.forEach((item) => uniqueNamesSet.add(item.categoryName));
     this.uniqueCategoryNamesResults = Array.from(uniqueNamesSet);
+
+    await this.checkDoubles();
+  }
+
+  async showLickAmount() {
+    const lickAmountSum = this.gambleArray.reduce(
+      (total, current) => total + current.licksAmount,
+      0
+    );
+    if (lickAmountSum < this.number) {
+      this.hasError = true;
+      return;
+    }
+    this.hasError = false;
+  }
+
+  async checkDoubles() {
+    const exerciseLickCounts: { [key: string]: { [key: number]: number } } = {};
+    this.gambleArray.forEach((item) => {
+      if (!exerciseLickCounts[item.exerciseName]) {
+        exerciseLickCounts[item.exerciseName] = {};
+      }
+      exerciseLickCounts[item.exerciseName][item.lickNumber] =
+        (exerciseLickCounts[item.exerciseName][item.lickNumber] || 0) + 1;
+    });
+
+    const duplicates: any[] = [];
+    for (const exerciseName in exerciseLickCounts) {
+      if (exerciseLickCounts.hasOwnProperty(exerciseName)) {
+        const lickCounts = exerciseLickCounts[exerciseName];
+        for (const lickNumber in lickCounts) {
+          if (
+            lickCounts.hasOwnProperty(lickNumber) &&
+            lickCounts[lickNumber] > 1
+          ) {
+            duplicates.push({ exerciseName, lickNumber });
+          }
+        }
+      }
+    }
+    this.doubles = duplicates.length > 0;
+
+    if (this.doubles) {
+      console.log('Gamble wurde erneut gestartet.');
+      await this.result();
+    } else {
+      console.log('Gamble war erfolgreich.');
+    }
   }
 
   generateRandomLicks(min: number, max: number): number {
@@ -231,7 +285,7 @@ export class OverviewComponent {
       results.push({
         exerciseName: selectedExercise.exerciseName,
         lickNumber: lickNumber,
-        categoryName: selectedExercise.categoryName
+        categoryName: selectedExercise.categoryName,
       });
     }
 
@@ -254,7 +308,7 @@ export class OverviewComponent {
     });
     this.categoriesLoaded = true;
   }
-  
+
   sortedExercises() {
     return this.firebase.collection.sort((a, b) => {
       if (a.categoryName < b.categoryName) {
@@ -268,15 +322,18 @@ export class OverviewComponent {
   }
 
   hasSelectedCategories(): boolean {
-    return this.firebase.collection.some(item => item.categorySelected);
+    return this.firebase.collection.some((item) => item.categorySelected);
   }
 
   hasSelectedExercises(): boolean {
-    return this.firebase.collection.some(item => item.exerciseSelected);
+    return this.firebase.collection.some((item) => item.exerciseSelected);
   }
 
   hasMultipleSelectedExercises(): boolean {
-    return this.firebase.collection.filter(item => item.categorySelected).length > 1;
+    return (
+      this.firebase.collection.filter((item) => item.categorySelected).length >
+      1
+    );
   }
 
   hasMultipleCategories(): boolean {
