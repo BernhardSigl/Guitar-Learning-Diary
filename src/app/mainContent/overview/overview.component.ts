@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Category } from '../../class/category.class';
+import { ExerciseListComponent } from '../../popups/exercise-list/exercise-list.component';
 
 @Component({
   selector: 'app-overview',
@@ -50,10 +51,22 @@ export class OverviewComponent {
     await this.checkEmptyCategories();
     await this.getUniqueCategories();
     this.allCategories();
+    this.firebase.updateOverview.subscribe(() => {
+      this.ngOnInit();
+    });
   }
 
   addExercisePopup() {
-    this.dialog.open(AddExerciseComponent, {
+    const dialogRef = this.dialog.open(AddExerciseComponent, {
+      panelClass: 'addExercisePopup',
+    });
+    dialogRef.componentInstance.onSaveSuccess.subscribe(() => {
+      this.ngOnInit();
+    });
+  }
+
+  listCategoriesPopup() {
+    const dialogRef = this.dialog.open(ExerciseListComponent, {
       panelClass: 'addExercisePopup',
     });
   }
@@ -69,7 +82,6 @@ export class OverviewComponent {
         exerciseSelected: false,
       });
       await this.firebase.addCollection(newCategory);
-
       await this.firebase.ngOnInit();
     }
   }

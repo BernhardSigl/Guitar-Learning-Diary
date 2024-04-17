@@ -1,0 +1,5 @@
+<mat-selection-list>
+  @for (category of firebase.categoryDropdown; track category) {
+  <mat-list-item (click)="editExercisePopup(category)">{{ category }}</mat-list-item>
+  }
+</mat-selection-list>

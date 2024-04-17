@@ -1,5 +1,5 @@
 <div class="window">
-  <div class="example-flex-container">
+  <div class="create-edit-btns dFlex">
     <div class="example-button-container">
       <button
         (click)="addExercisePopup()"
@@ -8,6 +8,17 @@
         aria-label="Example icon button with a menu icon"
       >
         <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <div class="example-button-container">
+      <button
+        (click)="listCategoriesPopup()"
+        mat-mini-fab
+        color="primary"
+        aria-label="Example icon button with a menu icon"
+      >
+        <mat-icon>edit</mat-icon>
       </button>
     </div>
   </div>
@@ -118,48 +129,45 @@
     </button>
 
     <button
-    [disabled]="!hasSelectedExercises()"
-    (click)="result()"
-    mat-flat-button
-    color="primary"
-  >
-    Gamble
-  </button>
-
+      [disabled]="!hasSelectedExercises()"
+      (click)="result()"
+      mat-flat-button
+      color="primary"
+    >
+      Gamble
+    </button>
   </div>
 
   <br />
 
-
   <div class="gamble-output">
-  @for (categoryName of uniqueCategoryNamesResults; track categoryName) {
+    @for (categoryName of uniqueCategoryNamesResults; track categoryName) {
 
-<div class="test4">
+    <div>
+      <h5 class="category-in-gamble">Category: {{ categoryName }}</h5>
 
-  <h5 class="category-in-gamble">Category: {{ categoryName }}</h5>
+      <div>
+        @for (gambleElement of gambleArray; track gambleElement; let i = $index)
+        {
 
-  <div class="test2">
-  @for (gambleElement of gambleArray; track gambleElement; let i = $index) {
+        <div *ngIf="gambleElement.categoryName === categoryName" class="test">
+          <h3
+            *ngIf="
+              i === 0 ||
+              gambleElement.exerciseName !== gambleArray[i - 1].exerciseName
+            "
+          >
+            Exercise: {{ gambleElement.exerciseName }}<br />Lick(s):
+          </h3>
 
-  <div *ngIf="gambleElement.categoryName === categoryName" class="test">
-    <h3
-      *ngIf="
-        i === 0 ||
-        gambleElement.exerciseName !== gambleArray[i - 1].exerciseName
-      "
-    >
-      Exercise: {{ gambleElement.exerciseName }}<br />Lick(s):
-    </h3>
+          <h3 class="gamble-licks-output">#{{ gambleElement.lickNumber }}</h3>
+        </div>
 
-    <h3 class="gamble-licks-output">#{{ gambleElement.lickNumber }}</h3>
+        } @empty {
+        <h3>There are no items.</h3>
+        }
+      </div>
+    </div>
+    }
   </div>
-
-  } @empty {
-  <h3>There are no items.</h3>
-  }
-  </div>
-</div>
-}
-</div>
-  
 </div>

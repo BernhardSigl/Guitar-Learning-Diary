@@ -2,7 +2,7 @@
   <mat-card-header class="column">
     <mat-form-field class="popup-input">
       <mat-label>Category</mat-label>
-      <mat-select [(ngModel)]="categoryName">
+      <mat-select [(ngModel)]="categoryName" #categoryNameSelect (selectionChange)="closeDropdown(categoryNameSelect)">
         <div class="dFlex">
           <mat-form-field class="addCategoryInput">
             <mat-label>Add category</mat-label>
@@ -14,7 +14,7 @@
           </mat-form-field>
           <div class="addCategoryBtn">
             <button
-              (click)="addCategoryBtn(addCategory)"
+              (click)="addCategoryBtn(addCategory, categoryNameSelect)"
               mat-mini-fab
               color="primary"
               aria-label="Example icon button with a menu icon"

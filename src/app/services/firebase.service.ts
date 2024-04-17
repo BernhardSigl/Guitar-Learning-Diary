@@ -12,6 +12,7 @@ import {
 } from '@angular/fire/firestore';
 import { User } from '../class/user.class';
 import { Category } from '../class/category.class';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,6 +26,11 @@ export class FirebaseService {
   categoryDropdown: any[] = [];
 
   firestore: Firestore = inject(Firestore);
+
+  updateTrigger: Subject<void> = new Subject<void>();
+  updateOverview: Subject<void> = new Subject<void>();
+
+  updatedCategoryName: string = '';
 
   constructor() {}
 
@@ -82,10 +88,6 @@ export class FirebaseService {
     return doc(this.getUsersColRef(), this.userId);
   }
 
-  // async getLoggedInUserInfos(): Promise<void> {
-  //   const loggedInUserInfo = this.usersArray[0];
-  // }
-
   async createNewUser(email: string) {
     const newUser = new User({
       email: email,
@@ -130,11 +132,9 @@ export class FirebaseService {
       { merge: true }
     );
   }
-
   // save exercise end
 
   async saveCategoriesBool(bool: boolean) {
-
     this.collection.forEach(element => {
       element.categorySelected = bool;
     });
@@ -147,7 +147,6 @@ export class FirebaseService {
   }
 
   async saveExercisesBool(bool: boolean) {
-
     this.collection.forEach(element => {
       element.exerciseSelected = bool;
     });
@@ -159,5 +158,27 @@ export class FirebaseService {
     );
   }
 
-  
+  async saveCollection(newCollection: any) {
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { collection: newCollection },
+      { merge: true }
+    );
+  }
+
+  async saveCategoryDropdown(newDropdown: any) {
+    await setDoc(
+      this.getSingleUserDocRef(),
+      { categories: newDropdown },
+      { merge: true }
+    );
+  }
+
+  triggerExerciseListUpdate() {
+    this.updateTrigger.next();
+  }
+
+  triggerOverview() {
+    this.updateOverview.next();
+  }
 }

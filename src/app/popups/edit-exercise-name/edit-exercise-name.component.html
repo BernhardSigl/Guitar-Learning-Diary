@@ -1,0 +1,22 @@
+<div class="popup">
+  <mat-form-field class="example-full-width">
+    <mat-label>Exercise</mat-label>
+    <input
+      matInput
+      [placeholder]="data.exerciseName"
+      value="newExerciseName"
+      [(ngModel)]="newExerciseName"
+      required
+    />
+  </mat-form-field>
+
+  <button
+    [disabled]="newExerciseName === ''"
+    mat-mini-fab
+    color="primary"
+    aria-label="Example icon button with a menu icon"
+    (click)="save()"
+  >
+    <mat-icon>save</mat-icon>
+  </button>
+</div>

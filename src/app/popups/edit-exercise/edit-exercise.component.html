@@ -1,0 +1,41 @@
+<div class="popup">
+  <div class="space-between">
+    <h1>{{ categories[0].categoryName }}</h1>
+
+    <button
+      (click)="editCategoryName(categories[0].categoryName)"
+      mat-mini-fab
+      color="primary"
+      aria-label="Example icon button with a menu icon"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+
+  @for(category of categories; track category){
+  <div class="space-between">
+    <h2>Exercise: {{ category.exerciseName }}</h2>
+
+    <button
+    (click)="editExerciseName(category.exerciseName, categories[0].categoryName)"
+      mat-mini-fab
+      color="primary"
+      aria-label="Example icon button with a menu icon"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+  <div class="space-between">
+    <h3>Licks: {{ category.licksAmount }}</h3>
+
+    <button
+      mat-mini-fab
+      color="primary"
+      aria-label="Example icon button with a menu icon"
+      (click)="editLicksAmount(category.exerciseName, categories[0].categoryName, category.licksAmount)"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+  }
+</div>

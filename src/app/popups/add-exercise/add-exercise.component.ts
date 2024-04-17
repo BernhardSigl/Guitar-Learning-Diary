@@ -1,14 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { FirebaseService } from '../../services/firebase.service';
 import { Category } from '../../class/category.class';
-import { v4 as uuidv4 } from 'uuid';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef } from '@angular/material/dialog';
 
@@ -39,11 +38,13 @@ export class AddExerciseComponent {
   categoryArray: any[] = [];
 
   firebase = inject(FirebaseService);
-
-  constructor(public dialogRef: MatDialogRef<AddExerciseComponent>) {}
+  @Output() onSaveSuccess: EventEmitter<void> = new EventEmitter<void>();
+  constructor(
+    public dialogRef: MatDialogRef<AddExerciseComponent>,
+  ) {}
 
   async ngOnInit(): Promise<void> {
-    await this.firebase.ngOnInit();
+    // await this.firebase.ngOnInit();
   }
 
   async save() {
@@ -58,11 +59,18 @@ export class AddExerciseComponent {
     await this.firebase.addCollection(newCategory);
     await this.firebase.ngOnInit();
     this.dialogRef.close();
+    this.dialogRef.componentInstance.onSaveSuccess.emit();
   }
 
-  async addCategoryBtn(addCategory: string) {
+  async addCategoryBtn(addCategory: string, select: MatSelect) {
     await this.firebase.addCategory(addCategory);
     await this.firebase.ngOnInit();
     this.addCategory = '';
+    this.categoryName = addCategory;
+    this.closeDropdown(select);
+  }
+
+  closeDropdown(select: MatSelect) {
+    select.close();
   }
 }

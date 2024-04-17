@@ -1,0 +1,23 @@
+<div class="popup">
+    <mat-form-field class="example-full-width">
+      <mat-label>Licks</mat-label>
+      <input
+        matInput
+        [placeholder]="data.licksAmount"
+        value="newLicksAmount"
+        type="number"
+        [(ngModel)]="newLicksAmount"
+        required
+      />
+    </mat-form-field>
+  
+    <button
+      [disabled]="newLicksAmount === 0"
+      mat-mini-fab
+      color="primary"
+      aria-label="Example icon button with a menu icon"
+      (click)="save()"
+    >
+      <mat-icon>save</mat-icon>
+    </button>
+  </div>
