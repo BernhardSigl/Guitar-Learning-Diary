@@ -41,8 +41,6 @@ export class EditLicksAmountComponent {
         item.licksAmount = this.newLicksAmount;
       }
     }
-    console.log(this.firebase.usersArray[0].collection);
-    
     await this.firebase.saveCollection(this.firebase.usersArray[0].collection);
     await this.firebase.ngOnInit();
     this.dialogRef.close();

@@ -29,8 +29,6 @@ export class EditExerciseComponent {
   ){}
 
   async ngOnInit(): Promise<void> {
-    console.log('test');
-    
     if (this.firebase.updatedCategoryName === '') {
           this.categories = this.firebase.collection.filter(item => item.categoryName === this.data.categoryName);
     } else {
@@ -77,8 +75,6 @@ export class EditExerciseComponent {
 
   async deleteExercise(exerciseName: string, categoryName: string) {
     let indexToDelete = -1;
-    console.log(this.firebase.usersArray[0].collection);
-    
     for (let i = 0; i < this.firebase.usersArray[0].collection.length; i++) {
       const collection = this.firebase.usersArray[0].collection[i];
       if (collection.categoryName === categoryName && collection.exerciseName === exerciseName) {
