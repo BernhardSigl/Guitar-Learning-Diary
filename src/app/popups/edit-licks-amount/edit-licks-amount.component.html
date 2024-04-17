@@ -12,7 +12,7 @@
     </mat-form-field>
   
     <button
-      [disabled]="newLicksAmount === 0"
+      [disabled]="newLicksAmount < 1"
       mat-mini-fab
       color="primary"
       aria-label="Example icon button with a menu icon"

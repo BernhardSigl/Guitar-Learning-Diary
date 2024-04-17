@@ -32,16 +32,14 @@ export class AddExerciseComponent {
   exerciseName!: string;
   addCategory!: string;
   licksAmount!: number;
-
-  disableSaveBtn = false;
+  
+  disableAddBtn = false;
 
   categoryArray: any[] = [];
 
   firebase = inject(FirebaseService);
   @Output() onSaveSuccess: EventEmitter<void> = new EventEmitter<void>();
-  constructor(
-    public dialogRef: MatDialogRef<AddExerciseComponent>,
-  ) {}
+  constructor(public dialogRef: MatDialogRef<AddExerciseComponent>) {}
 
   async ngOnInit(): Promise<void> {
     // await this.firebase.ngOnInit();
@@ -72,5 +70,20 @@ export class AddExerciseComponent {
 
   closeDropdown(select: MatSelect) {
     select.close();
+  }
+
+  checkInput(addCategory: string) {
+    if (!addCategory) {
+      this.disableAddBtn = true;
+      return;
+    }
+  
+    for (const element of this.firebase.usersArray[0].collection) {
+      if (element.categoryName === addCategory) {
+        this.disableAddBtn = true;
+        return;
+      }
+    }
+      this.disableAddBtn = false;
   }
 }

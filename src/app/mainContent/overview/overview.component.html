@@ -1,24 +1,37 @@
 <div class="window">
-  <div class="create-edit-btns dFlex">
-    <div class="example-button-container">
-      <button
-        (click)="addExercisePopup()"
-        mat-mini-fab
-        color="primary"
-        aria-label="Example icon button with a menu icon"
-      >
-        <mat-icon>add</mat-icon>
-      </button>
+  <div class="header">
+    <div class="create-edit-btns dFlex">
+      <div class="example-button-container">
+        <button
+          (click)="addExercisePopup()"
+          mat-mini-fab
+          color="primary"
+          aria-label="Example icon button with a menu icon"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+
+      <div class="example-button-container">
+        <button
+          (click)="listCategoriesPopup()"
+          mat-mini-fab
+          color="primary"
+          aria-label="Example icon button with a menu icon"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
     </div>
 
     <div class="example-button-container">
       <button
-        (click)="listCategoriesPopup()"
+      (click)="logout()"
         mat-mini-fab
         color="primary"
         aria-label="Example icon button with a menu icon"
       >
-        <mat-icon>edit</mat-icon>
+        <mat-icon>logout</mat-icon>
       </button>
     </div>
   </div>

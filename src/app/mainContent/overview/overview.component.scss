@@ -8,6 +8,11 @@ h3 {
   margin: 0;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .category-in-exercise {
   margin: 5px 0 5px 10px;
 }

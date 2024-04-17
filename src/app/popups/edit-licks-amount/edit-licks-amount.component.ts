@@ -31,6 +31,10 @@ export class EditLicksAmountComponent {
     private dialogRef: MatDialogRef<EditLicksAmountComponent>,
   ) {}
 
+  async ngOnInit(): Promise<void> {
+    this.newLicksAmount = this.data.licksAmount;
+  }
+
   async save() {
     for (const item of this.firebase.usersArray[0].collection) {
       if (item.categoryName === this.data.categoryName && item.exerciseName === this.data.exerciseName) {

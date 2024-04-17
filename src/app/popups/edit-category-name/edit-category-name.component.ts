@@ -31,6 +31,10 @@ export class EditCategoryNameComponent {
     private dialogRef: MatDialogRef<EditCategoryNameComponent>,
   ) {}
 
+  async ngOnInit(): Promise<void> {
+      this.newCategoryName = this.data.categoryName;
+  }
+
   async save() {
     for (const item of this.firebase.usersArray[0].collection) {
       if (item.categoryName === this.data.categoryName) {

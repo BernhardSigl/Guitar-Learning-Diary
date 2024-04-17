@@ -282,4 +282,9 @@ export class OverviewComponent {
   hasMultipleCategories(): boolean {
     return this.uniqueCategories.length > 1;
   }
+
+  logout() {
+    localStorage.clear();
+    window.location.href = '/';
+  }
 }

@@ -20,7 +20,7 @@ import { FirebaseService } from '../../services/firebase.service';
     MatButtonModule,
   ],
   templateUrl: './edit-exercise-name.component.html',
-  styleUrl: './edit-exercise-name.component.scss'
+  styleUrl: './edit-exercise-name.component.scss',
 })
 export class EditExerciseNameComponent {
   newExerciseName!: string;
@@ -28,12 +28,19 @@ export class EditExerciseNameComponent {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<EditExerciseNameComponent>,
+    private dialogRef: MatDialogRef<EditExerciseNameComponent>
   ) {}
+
+  async ngOnInit(): Promise<void> {
+    this.newExerciseName = this.data.exerciseName;
+  }
 
   async save() {
     for (const item of this.firebase.usersArray[0].collection) {
-      if (item.categoryName === this.data.categoryName && item.exerciseName === this.data.exerciseName) {
+      if (
+        item.categoryName === this.data.categoryName &&
+        item.exerciseName === this.data.exerciseName
+      ) {
         item.exerciseName = this.newExerciseName;
       }
     }

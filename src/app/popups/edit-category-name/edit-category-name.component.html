@@ -1,16 +1,17 @@
 <div class="popup">
   <mat-form-field class="example-full-width">
     <mat-label>Category</mat-label>
-    <input matInput
-    [placeholder]="data.categoryName"
-    value="newCategoryName"
-    [(ngModel)]="newCategoryName"
-    required
+    <input
+      matInput
+      placeholder="{{ data.categoryName }}"
+      value="newCategoryName"
+      [(ngModel)]="newCategoryName"
+      required
     />
   </mat-form-field>
 
   <button
-  [disabled]="newCategoryName === ''"
+    [disabled]="newCategoryName === ''"
     mat-mini-fab
     color="primary"
     aria-label="Example icon button with a menu icon"
