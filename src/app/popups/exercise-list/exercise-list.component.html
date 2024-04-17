@@ -1,5 +1,28 @@
 <mat-selection-list>
-  @for (category of firebase.categoryDropdown; track category) {
-  <mat-list-item (click)="editExercisePopup(category)">{{ category }}</mat-list-item>
+  @for (category of firebase.categoryDropdown; track category; let i = $index) {
+  <div class="category-edit">
+    <mat-list-item (click)="editExercisePopup(category)">{{
+      category
+    }}</mat-list-item>
+
+    <button
+    (click)="deleteCategory(category)"
+      mat-mini-fab
+      color="primary"
+      aria-label="Example icon button with a menu icon"
+      [disabled]="firebase.categoryDropdown.length === 1"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+
+    <button
+    (click)="editExercisePopup(category)"
+    mat-mini-fab
+    color="primary"
+    aria-label="Example icon button with a menu icon"
+  >
+    <mat-icon>edit</mat-icon>
+  </button>
+  </div>
   }
 </mat-selection-list>

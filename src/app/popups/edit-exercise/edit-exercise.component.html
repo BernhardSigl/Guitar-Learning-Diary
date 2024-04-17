@@ -2,22 +2,48 @@
   <div class="space-between">
     <h1>{{ categories[0].categoryName }}</h1>
 
-    <button
-      (click)="editCategoryName(categories[0].categoryName)"
-      mat-mini-fab
-      color="primary"
-      aria-label="Example icon button with a menu icon"
-    >
-      <mat-icon>edit</mat-icon>
-    </button>
+    <div class="dFlex edit-delete-btns">
+      <button
+        style="visibility: hidden"
+        mat-mini-fab
+        color="primary"
+        aria-label="Example icon button with a menu icon"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button
+        (click)="editCategoryName(categories[0].categoryName)"
+        mat-mini-fab
+        color="primary"
+        aria-label="Example icon button with a menu icon"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
   </div>
 
   @for(category of categories; track category){
   <div class="space-between">
     <h2>Exercise: {{ category.exerciseName }}</h2>
 
+    <div class="dFlex edit-delete-btns">
     <button
-    (click)="editExerciseName(category.exerciseName, categories[0].categoryName)"
+    [disabled]="categories.length <= 1"
+      mat-mini-fab
+      color="primary"
+      aria-label="Example icon button with a menu icon"
+      (click)="
+        deleteExercise(category.exerciseName, categories[0].categoryName)
+      "
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+
+    <button
+      (click)="
+        editExerciseName(category.exerciseName, categories[0].categoryName)
+      "
       mat-mini-fab
       color="primary"
       aria-label="Example icon button with a menu icon"
@@ -25,17 +51,35 @@
       <mat-icon>edit</mat-icon>
     </button>
   </div>
+  </div>
   <div class="space-between">
     <h3>Licks: {{ category.licksAmount }}</h3>
+
+    <div class="dFlex edit-delete-btns">
+    <button
+      style="visibility: hidden"
+      mat-mini-fab
+      color="primary"
+      aria-label="Example icon button with a menu icon"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
 
     <button
       mat-mini-fab
       color="primary"
       aria-label="Example icon button with a menu icon"
-      (click)="editLicksAmount(category.exerciseName, categories[0].categoryName, category.licksAmount)"
+      (click)="
+        editLicksAmount(
+          category.exerciseName,
+          categories[0].categoryName,
+          category.licksAmount
+        )
+      "
     >
       <mat-icon>edit</mat-icon>
     </button>
+  </div>
   </div>
   }
 </div>

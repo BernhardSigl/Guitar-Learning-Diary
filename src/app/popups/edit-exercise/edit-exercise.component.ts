@@ -29,7 +29,7 @@ export class EditExerciseComponent {
   ){}
 
   async ngOnInit(): Promise<void> {
-    console.log(this.firebase.updatedCategoryName);
+    console.log('test');
     
     if (this.firebase.updatedCategoryName === '') {
           this.categories = this.firebase.collection.filter(item => item.categoryName === this.data.categoryName);
@@ -74,5 +74,29 @@ export class EditExerciseComponent {
       }
     });
   }
+
+  async deleteExercise(exerciseName: string, categoryName: string) {
+    let indexToDelete = -1;
+    console.log(this.firebase.usersArray[0].collection);
+    
+    for (let i = 0; i < this.firebase.usersArray[0].collection.length; i++) {
+      const collection = this.firebase.usersArray[0].collection[i];
+      if (collection.categoryName === categoryName && collection.exerciseName === exerciseName) {
+        indexToDelete = i;
+        break;
+      }
+    }
+  
+    if (indexToDelete !== -1) {
+      this.firebase.usersArray[0].collection.splice(indexToDelete, 1);
+      await this.firebase.saveCollection(this.firebase.usersArray[0].collection);
+      await this.firebase.ngOnInit();
+      await this.ngOnInit();
+    } else {
+      console.log("Das zu löschende Element wurde nicht gefunden.");
+    }
+  }
+  
+  
 
 }
