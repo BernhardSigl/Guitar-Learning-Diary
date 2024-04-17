@@ -4,15 +4,17 @@ body {
   display: flex;
   justify-content: center;
   background-color: black;
-}
+  overflow-x: hidden;
 
-app-root {
-  width: 100vw;
   background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
     url("./assets/img/guitar-login-big.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
+}
+
+app-root {
+  width: 100vw;
 }
 
 body {
@@ -22,7 +24,13 @@ body {
 
 app-overview {
   width: 80%;
-  padding: 10% 0;
+  padding: 5% 0;
+}
+
+@media (max-width: 1000px) {
+  app-overview {
+    padding: 10% 0;
+  }
 }
 
 .mat-mdc-unelevated-button[disabled],
@@ -90,8 +98,9 @@ app-register {
 }
 // popups end
 
-@media (max-width: 768px) {
-  app-root {
+@media (max-width: 1000px) {
+  html,
+  body {
     background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
       url("./assets/img/guitar-login.jpg") !important;
   }

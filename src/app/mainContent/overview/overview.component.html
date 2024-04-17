@@ -116,28 +116,50 @@
     >
       <mat-icon>add</mat-icon>
     </button>
+
+    <button
+    [disabled]="!hasSelectedExercises()"
+    (click)="result()"
+    mat-flat-button
+    color="primary"
+  >
+    Gamble
+  </button>
+
   </div>
 
   <br />
-  <button class="gamble-btn" [disabled]="!hasSelectedExercises()" (click)="result()" mat-flat-button color="primary">Gamble</button>
 
+
+  <div class="gamble-output">
   @for (categoryName of uniqueCategoryNamesResults; track categoryName) {
 
+<div class="test4">
+
   <h5 class="category-in-gamble">Category: {{ categoryName }}</h5>
-    
+
+  <div class="test2">
   @for (gambleElement of gambleArray; track gambleElement; let i = $index) {
 
-  <div class="gambleResult dFlex">
-    <div *ngIf="gambleElement.categoryName === categoryName">
-    <h3 *ngIf="i === 0 || gambleElement.exerciseName !== gambleArray[i - 1].exerciseName">
-      {{ gambleElement.exerciseName }}</h3>
-      
-      <h3>{{ gambleElement.lickNumber }}</h3>
-    </div>
+  <div *ngIf="gambleElement.categoryName === categoryName" class="test">
+    <h3
+      *ngIf="
+        i === 0 ||
+        gambleElement.exerciseName !== gambleArray[i - 1].exerciseName
+      "
+    >
+      Exercise: {{ gambleElement.exerciseName }}<br />Lick(s):
+    </h3>
+
+    <h3 class="gamble-licks-output">#{{ gambleElement.lickNumber }}</h3>
   </div>
 
   } @empty {
   <h3>There are no items.</h3>
   }
+  </div>
+</div>
 }
+</div>
+  
 </div>
